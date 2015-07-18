@@ -108,5 +108,14 @@ task usercontrol()
 	  } else if(vexRT[Btn5D] == 1) {
 	  motor[intakeLower] = 127;  // lower intake runs up
 	    } 
+	        
+    // Launch
+    if (vexRT[somebutton] == 1 && launcherSpeed < 127){
+    	launcherSpeed++;
+    } else if (launcherSpeed > 0 && vexRT[somebutton] == 0) {
+    	launcherSpeed--;
+  	}
+  	motor[whatevermotorForLauncher1] = launcherSpeed;
+		motor[whatevermotorForLauncher2] = launcherSpeed;
 	 	}
 }
