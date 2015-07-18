@@ -58,6 +58,7 @@ int backRightMotorSpeed = 0;
 int backLeftMotorSpeed = 0;
 int intakeSpeedUpper = 0;
 int intakeSpeedLower = 0;
+int launcherSpeed = 0;
 
 // All activities that occur before the competition starts
 // Example: clearing encoders, setting servo positions, ...
@@ -72,7 +73,7 @@ void pre_auton()
 // Task for the autonomous portion of the competition.
 task autonomous()
 {
-
+	// why u no download
 }
 
 // Task for the driver controlled portion of the competition.
@@ -91,31 +92,31 @@ task usercontrol()
     	motor[frontLeft] = frontLeftMotorSpeed;
 	motor[backLeft] = backLeftMotorSpeed;
 
-	// Intake control
-	intakeSpeedLower = motor[intakeLower];
-	intakeSpeedUpper = motor[intakeUpper];
-	if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
-	motor[intakeLower] = 127;
-	motor[intakeUpper] = 127;    	
-	} else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
-	motor[intakeLower] = -127;
-	motor[intakeUpper] = -127;    	
-	} 
+	  // Intake control
+	  intakeSpeedLower = motor[intakeLower];
+	  intakeSpeedUpper = motor[intakeUpper];
+	  if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
+	  motor[intakeLower] = 127;
+	  motor[intakeUpper] = 127;    	
+	  } else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
+	  motor[intakeLower] = -127;
+	  motor[intakeUpper] = -127;    	
+	  } 
     
-	// Individual intake control
-	if (vexRT[Btn5U] == 1) {
-	motor[intakeUpper] = 127;  // upper intake runs up
-	} else if(vexRT[Btn5D] == 1) {
-	motor[intakeLower] = 127;  // lower intake runs up
-	} 
+	  // Individual intake control
+	  if (vexRT[Btn5U] == 1) {
+	  motor[intakeUpper] = 127;  // upper intake runs up
+	  } else if(vexRT[Btn5D] == 1) {
+	  motor[intakeLower] = 127;  // lower intake runs up
+	    } 
 	        
-	// Launch
-	if (vexRT[somebutton] == 1 && launcherSpeed < 127){
+    // Launch and Howard's first RobotC coding!!!
+	  if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 127){
     	launcherSpeed++;
-    	} else if (launcherSpeed > 0 && vexRT[somebutton] == 0) {
+    } else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
     	launcherSpeed--;
   	}
   	motor[leftLauncher] = launcherSpeed;
-	motor[rightLauncher] = launcherSpeed;
-	}
+		motor[rightLauncher] = launcherSpeed;
+	 	}
 }
