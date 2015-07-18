@@ -81,32 +81,32 @@ task usercontrol()
 	while (true)
 	{
 
-		// Drive commands.
-		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-    backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
-    frontLeftMotorSpeed =  vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-	  backLeftMotorSpeed = vexRT[Ch3] - vexRT[Ch4] + vexRT[Ch1];
-	  motor[frontRight] = frontRightMotorSpeed;
-    motor[backRight] = backRightMotorSpeed;
-    motor[frontLeft] = frontLeftMotorSpeed;
-	  motor[backLeft] = backLeftMotorSpeed;
+	// Drive commands.
+	frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
+	backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
+	frontLeftMotorSpeed =  vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
+	backLeftMotorSpeed = vexRT[Ch3] - vexRT[Ch4] + vexRT[Ch1];
+	motor[frontRight] = frontRightMotorSpeed;
+    	motor[backRight] = backRightMotorSpeed;
+    	motor[frontLeft] = frontLeftMotorSpeed;
+	motor[backLeft] = backLeftMotorSpeed;
 
 	  // Intake control
 	  intakeSpeedLower = motor[intakeLower];
 	  intakeSpeedUpper = motor[intakeUpper];
 	  if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
-    	motor[intakeLower] = 127;
-    	motor[intakeUpper] = 127;    	
-    } else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
-    	motor[intakeLower] = -127;
-    	motor[intakeUpper] = -127;    	
-    } 
+	  motor[intakeLower] = 127;
+	  motor[intakeUpper] = 127;    	
+	  } else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
+	  motor[intakeLower] = -127;
+	  motor[intakeUpper] = -127;    	
+	  } 
     
-    // Individual intake control
-    if (vexRT[Btn5U] == 1) {
-    	motor[intakeUpper] = 127;  // upper intake runs up
-    } else if(vexRT[Btn5D] == 1) {
-    	motor[intakeLower] = 127;  // lower intake runs up
-    } 
- 	}
+	  // Individual intake control
+	  if (vexRT[Btn5U] == 1) {
+	  motor[intakeUpper] = 127;  // upper intake runs up
+	  } else if(vexRT[Btn5D] == 1) {
+	  motor[intakeLower] = 127;  // lower intake runs up
+	    } 
+	 	}
 }
