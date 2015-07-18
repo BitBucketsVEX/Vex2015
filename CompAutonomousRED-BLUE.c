@@ -115,7 +115,7 @@ task usercontrol()
     } else if (launcherSpeed > 0 && vexRT[somebutton] == 0) {
     	launcherSpeed--;
   	}
-  	motor[whatevermotorForLauncher1] = launcherSpeed;
-		motor[whatevermotorForLauncher2] = launcherSpeed;
+  	motor[leftLauncher] = launcherSpeed;
+	motor[rightLauncher] = launcherSpeed;
 	 	}
 }
