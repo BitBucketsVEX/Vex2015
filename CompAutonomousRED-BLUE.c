@@ -56,24 +56,24 @@ int frontLeftMotorSpeed = 0;
 int frontRightMotorSpeed = 0;
 int backRightMotorSpeed = 0;
 int backLeftMotorSpeed = 0;
-int intakeSpeedUpper = 0;
-int intakeSpeedLower = 0;
 int launcherSpeed = 0;
+int lowerSpeed = 0;
+int upperSpeed = 0;
 
 // All activities that occur before the competition starts
 // Example: clearing encoders, setting servo positions, ...
 void pre_auton()
 {
-  // Set bStopTasksBetweenModes to false if you want to keep user created tasks running between
-  // Autonomous and Tele-Op modes. You will need to manage all user created tasks if set to false.
-bStopTasksBetweenModes = true;
+	// Set bStopTasksBetweenModes to false if you want to keep user created tasks running between
+	// Autonomous and Tele-Op modes. You will need to manage all user created tasks if set to false.
+	bStopTasksBetweenModes = true;
 
 }
 
 // Task for the autonomous portion of the competition.
 task autonomous()
 {
-
+	// because this comment is useful :P
 }
 
 // Task for the driver controlled portion of the competition.
@@ -81,45 +81,45 @@ task usercontrol()
 {
 	while (true)
 	{
-		//delay to let launcher ramp up slowly
-		sleep(20);
-		
-		
+
 		// Drive commands.
 		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-    		backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
+		backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
 		frontLeftMotorSpeed =  vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-	  	backLeftMotorSpeed = vexRT[Ch3] - vexRT[Ch4] + vexRT[Ch1];
-	  	motor[frontRight] = frontRightMotorSpeed;
-    		motor[backRight] = backRightMotorSpeed;
-    		motor[frontLeft] = frontLeftMotorSpeed;
-	  	motor[backLeft] = backLeftMotorSpeed;
+		backLeftMotorSpeed = vexRT[Ch3] - vexRT[Ch4] + vexRT[Ch1];
+		motor[frontRight] = frontRightMotorSpeed;
+		motor[backRight] = backRightMotorSpeed;
+		motor[frontLeft] = frontLeftMotorSpeed;
+		motor[backLeft] = backLeftMotorSpeed;
 
-	  	// Intake control
-	  	intakeSpeedLower = motor[intakeLower];
-		intakeSpeedUpper = motor[intakeUpper];
-	  	if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
-    		motor[intakeLower] = 127;
-    		motor[intakeUpper] = 127;
-    		} else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
-    		motor[intakeLower] = -127;
-    		motor[intakeUpper] = -127;
-    		}
+		// Intake control
+		upperSpeed = 0;
+		lowerSpeed = 0;
+		if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
+			lowerSpeed = 127;
+			upperSpeed = 127;
+		} else if (vexRT[Btn6D] == 1){ // both intake motors up when button 6D pressed
+			lowerSpeed = -127;
+			upperSpeed = -127;
+		}
 
-    		// Individual intake control
-    		if (vexRT[Btn5U] == 1) {
-    		motor[intakeUpper] = 127;  // upper intake runs up
-    		} else if(vexRT[Btn5D] == 1) {
-    		motor[intakeLower] = 127;  // lower intake runs up
-	 	}
-	 	
-	    	// Launch
-		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 127){
-	    	launcherSpeed++;
-	    	} else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
-	    	launcherSpeed--;
-	  	}
-	  	motor[leftLauncher] = launcherSpeed;
-			motor[rightLauncher] = launcherSpeed;
+		// Individual intake control
+		if (vexRT[Btn5U] == 1) {
+			upperSpeed = 127;  // upper intake runs up
+		} else if (vexRT[Btn5D] == 1) {
+			lowerSpeed = 127;  // lower intake runs up
+		}
+		motor[intakeLower] = lowerSpeed;
+		motor[intakeUpper] = upperSpeed;
+
+		// Launch
+		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 127) {
+			launcherSpeed++; // add 1 to the launcher speed
+		} else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
+			launcherSpeed--; // subtract 1 to launcher speed
+		}
+		motor[leftLauncher] = launcherSpeed;
+		motor[rightLauncher] = launcherSpeed;
+		// set the launch motors to the launcher speed
 	}
 }
