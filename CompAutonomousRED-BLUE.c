@@ -115,7 +115,7 @@ task usercontrol()
 		motor[intakeUpper] = upperSpeed;
 
 		// Launch
-		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 127) {
+		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 50) {
 			launcherSpeed++; // add 1 to the launcher speed
 		} else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
 			launcherSpeed--; // subtract 1 to launcher speed
