@@ -82,6 +82,8 @@ task usercontrol()
 	while (true)
 	{
 
+		sleep(20);
+
 		// Drive commands.
 		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
 		backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
