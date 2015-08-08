@@ -59,6 +59,7 @@ int backLeftMotorSpeed = 0;
 int launcherSpeed = 0;
 int lowerSpeed = 0;
 int upperSpeed = 0;
+int maxLauncherSpeed = 127;
 
 // All activities that occur before the competition starts
 // Example: clearing encoders, setting servo positions, ...
@@ -115,7 +116,7 @@ task usercontrol()
 		motor[intakeUpper] = upperSpeed;
 
 		// Launch
-		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < 50) {
+		if (vexRT[Btn6UXmtr2] == 1 && launcherSpeed < maxLauncherSpeed) {
 			launcherSpeed++; // add 1 to the launcher speed
 		} else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
 			launcherSpeed--; // subtract 1 to launcher speed
