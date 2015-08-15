@@ -77,7 +77,23 @@ int prevError = 0;
 int intError = 0;
 int difError = 0;
 int desiredSpeed;
+int victory = 0;
 
+task victoryDance() {
+	motor[frontRight] = 127;
+	motor[backRight] = 127;
+	motor[frontLeft] = -127;
+	motor[backLeft] = -127;
+	motor[gate] = 127;
+	wait1Msec(500);
+	motor[gate] = -127;
+	wait1Msec(500);
+	motor[gate] = 0;
+	motor[frontRight] = 0;
+	motor[backRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backLeft] = 0;
+}
 
 task Pid1() {
 	resetMotorEncoder(rightLauncher);
@@ -109,7 +125,6 @@ task Pid1() {
 task Pid2() {
 	resetMotorEncoder(leftLauncher);
 	while (true) {
-		sleep(per);
 
 		desiredSpeed = launcherSpeed;
 
@@ -157,6 +172,14 @@ task usercontrol()
 
 	while (true)
 	{
+		if (vexRT(Btn7L) == 1) {
+			if (victory == 0) {
+				startTask(victoryDance);
+				victory = 1;
+			}
+		} else {
+			victory = 0;
+		}
 
 		sleep(20);
 
@@ -189,7 +212,7 @@ task usercontrol()
 		if (vexRT[Btn8DXmtr2] == 1){	
 			gateSpeed = -127;
 		}
-			
+
 		motor[gate] = gateSpeed;
 
 		// Individual intake control
