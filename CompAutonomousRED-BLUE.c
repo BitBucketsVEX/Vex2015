@@ -3,14 +3,13 @@
 #pragma config(Sensor, dgtl2,  autoJumper,     sensorTouch)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
-#pragma config(Sensor, I2C_3,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
-#pragma config(Sensor, I2C_4,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
-#pragma config(Motor,  port2,           frontRight,    tmotorVex393_MC29, openLoop, encoderPort, I2C_1)
-#pragma config(Motor,  port3,           backRight,     tmotorVex393_MC29, openLoop, encoderPort, I2C_2)
-#pragma config(Motor,  port4,           backLeft,      tmotorVex393_MC29, openLoop, encoderPort, I2C_3)
-#pragma config(Motor,  port5,           frontLeft,     tmotorVex393_MC29, openLoop, encoderPort, I2C_4)
-#pragma config(Motor,  port6,           rightLauncher, tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port7,           leftLauncher,  tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port1,           gate,          tmotorVex393_HBridge, openLoop)
+#pragma config(Motor,  port2,           frontRight,    tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port3,           backRight,     tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port4,           backLeft,      tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port5,           frontLeft,     tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port6,           rightLauncher, tmotorVex393_MC29, openLoop, reversed, encoderPort, I2C_1)
+#pragma config(Motor,  port7,           leftLauncher,  tmotorVex393_MC29, openLoop, encoderPort, I2C_2)
 #pragma config(Motor,  port8,           intakeLower,   tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port9,           intakeUpper,   tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port10,          cuteIntake,    tmotorVex393_HBridge, openLoop)
@@ -60,6 +59,7 @@ int backLeftMotorSpeed = 0;
 int launcherSpeed = 0;
 int lowerSpeed = 0;
 int upperSpeed = 0;
+int gateSpeed = 0;
 int maxLauncherSpeed = 127;
 int per = 200;
 int prevPos = 0;
@@ -110,7 +110,7 @@ task Pid2() {
 	resetMotorEncoder(leftLauncher);
 	while (true) {
 		sleep(per);
-		
+
 		desiredSpeed = launcherSpeed;
 
 		currentPos = nMotorEncoder[leftLauncher];
@@ -152,6 +152,9 @@ task autonomous()
 // Task for the driver controlled portion of the competition.
 task usercontrol()
 {
+	startTask(Pid1);
+	startTask(Pid2);
+
 	while (true)
 	{
 
@@ -170,6 +173,7 @@ task usercontrol()
 		// Intake control
 		upperSpeed = 0;
 		lowerSpeed = 0;
+		gateSpeed = 0;
 		if (vexRT[Btn6U] == 1) {  // run both intake motors up when button 6 up pressed
 			lowerSpeed = 127;
 			if (launcherSpeed == maxLauncherSpeed) {
@@ -179,6 +183,14 @@ task usercontrol()
 			lowerSpeed = -127;
 			upperSpeed = -127;
 		}
+		if (vexRT[Btn8UXmtr2] == 1){
+			gateSpeed = 127;
+		}
+		if (vexRT[Btn8DXmtr2] == 1){	
+			gateSpeed = -127;
+		}
+			
+		motor[gate] = gateSpeed;
 
 		// Individual intake control
 		if (vexRT[Btn5U] == 1) {
@@ -196,8 +208,8 @@ task usercontrol()
 		} else if (launcherSpeed > 0 && vexRT[Btn6UXmtr2] == 0) {
 			launcherSpeed--; // subtract 1 to launcher speed
 		}
-		motor[leftLauncher] = launcherSpeed;
-		motor[rightLauncher] = launcherSpeed;
-		// set the launch motors to the launcher speed
+		//motor[leftLauncher] = launcherSpeed;
+		//motor[rightLauncher] = launcherSpeed;
+		// now done by pid loops
 	}
 }
