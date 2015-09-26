@@ -46,7 +46,7 @@ Motor Port 10
 #pragma userControlDuration(120)  // This is longer than 105 seconds to include external timer padding.
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
-//#include "AutonomousFunctions.c"
+#include "AutonomousFunctions.c"
 
 #define ONE_POINT_AUTO true
 
