@@ -167,21 +167,21 @@ task autonomous()
 // Task for the driver controlled portion of the competition.
 task usercontrol()
 {
-	StartTask(Pid1);
-	StartTask(Pid2);
+	startTask(Pid1);
+	startTask(Pid2);
 
 	while (true)
 	{
 		if (vexRT(Btn7L) == 1) {
 			if (victory == 0) {
-				StartTask(victoryDance);
+				startTask(victoryDance);
 				victory = 1;
 			}
 		} else {
 			victory = 0;
 		}
 
-		Sleep(20);
+		sleep(20);
 
 		// Drive commands.
 		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
