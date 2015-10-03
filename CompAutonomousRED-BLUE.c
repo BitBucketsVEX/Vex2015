@@ -46,7 +46,7 @@ Motor Port 10
 #pragma userControlDuration(120)  // This is longer than 105 seconds to include external timer padding.
 
 #include "Vex_Competition_Includes.c"   //Main competition background code...do not modify!
-#include "AutonomousFunctions.c"
+//#include "AutonomousFunctions.c"
 
 #define ONE_POINT_AUTO true
 
@@ -167,21 +167,21 @@ task autonomous()
 // Task for the driver controlled portion of the competition.
 task usercontrol()
 {
-	startTask(Pid1);
-	startTask(Pid2);
+	StartTask(Pid1);
+	StartTask(Pid2);
 
 	while (true)
 	{
 		if (vexRT(Btn7L) == 1) {
 			if (victory == 0) {
-				startTask(victoryDance);
+				StartTask(victoryDance);
 				victory = 1;
 			}
 		} else {
 			victory = 0;
 		}
 
-		sleep(20);
+		Sleep(20);
 
 		// Drive commands.
 		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
@@ -209,7 +209,7 @@ task usercontrol()
 		if (vexRT[Btn8UXmtr2] == 1){
 			gateSpeed = 127;
 		}
-		if (vexRT[Btn8DXmtr2] == 1){	
+		if (vexRT[Btn8DXmtr2] == 1){
 			gateSpeed = -127;
 		}
 
