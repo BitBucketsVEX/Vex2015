@@ -50,6 +50,10 @@ Motor Port 10
 
 #define ONE_POINT_AUTO true
 
+//Global Constants
+int const dt = 20;  // number of milliseconds per each control loop
+int const maxSteer = 50;  // percent of drive to apply to steering
+
 //Global variables
 
 int frontLeftMotorSpeed = 0;
@@ -77,9 +81,11 @@ int prevError = 0;
 int intError = 0;
 int difError = 0;
 int desiredSpeed;
-int victory = 0;
+//int victory = 0;
+int driveSpeed = 0;//The forward drive speed.
+int turnCoef = 0;//The turning amount.
 
-task victoryDance() {
+/* task victoryDance() {
 	motor[frontRight] = 127;
 	motor[backRight] = 127;
 	motor[frontLeft] = -127;
@@ -93,6 +99,47 @@ task victoryDance() {
 	motor[backRight] = 0;
 	motor[frontLeft] = 0;
 	motor[backLeft] = 0;
+} */
+
+//CALCODE Modifies the inout to create a linear speed curve.
+int linearize(int vel){
+	int pwm;
+	int linear[129] = {0, 0, 18, 18, 19, 19, 19, 19, 19, 19, 20, 20, 20, 20,
+		21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 23, 23, 24, 24, 24, 25, 25, 25,
+		25, 26, 26, 26, 26, 27, 27, 27, 27, 28, 28, 29, 29, 29, 29, 30, 30, 30,
+		31, 31, 31, 32, 32, 33, 33, 33, 34, 34, 35, 35, 36, 36, 36, 37, 37, 38,
+		38, 39, 39, 40, 40, 41, 41, 41, 42, 43, 43, 44, 44, 45, 45, 46, 47, 48,
+		49, 49, 50, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 64, 65, 66,
+		67, 68, 69, 70, 72, 73, 75, 76, 77, 79, 81, 83, 84, 84, 85, 85, 86, 86,
+		87, 87, 88, 90, 96, 105, 105};
+	if(vel > 127) {vel = 127;}
+	if(vel < -127) {vel = -127;}
+	if (vel < 0){
+		pwm = -linear[-vel];
+		} else {
+		pwm = linear[vel];
+	}
+	return pwm;
+}
+
+//CALCODE Implements a deadband so it doesn't move without moving a joystick.
+int deadband(int vel) {
+	return (abs(vel) < 24) ? 0: vel;
+}
+
+//CALCODE Drives the robot.
+task Drive_control
+{
+	while(true)
+	{
+		if(driveSpeed > 127) {driveSpeed = 127;}
+		if(driveSpeed < -127) {driveSpeed = -127;}
+		if(turnCoef > 127) {turnCoef = 127;}
+		if(turnCoef < -127) {turnCoef = -127;}
+		motor[frontLeft] = motor[frontLeft]  = linearize(driveSpeed + (maxSteer*turnCoef/100));
+		motor[frontRight] = motor[frontRight] = linearize(driveSpeed - (maxSteer*turnCoef/100));
+		wait1Msec(dt);
+	}
 }
 
 task Pid1() {
@@ -169,29 +216,27 @@ task usercontrol()
 {
 	startTask(Pid1);
 	startTask(Pid2);
+	startTask(Drive_control);
+	
 
 	while (true)
 	{
-		if (vexRT(Btn7L) == 1) {
+		// Drive control
+		driveSpeed = deadband(vexRT[Ch3]);
+		turnCoef = deadband(vexRT[Ch1]);
+
+		/* if (vexRT(Btn7L) == 1) {
 			if (victory == 0) {
 				startTask(victoryDance);
 				victory = 1;
 			}
 		} else {
 			victory = 0;
-		}
+		} */
 
 		sleep(20);
 
-		// Drive commands.
-		frontRightMotorSpeed = - vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-		backRightMotorSpeed = - vexRT[Ch3]  - vexRT[Ch4] + vexRT[Ch1];
-		frontLeftMotorSpeed =  vexRT[Ch3] + vexRT[Ch4] + vexRT[Ch1];
-		backLeftMotorSpeed = vexRT[Ch3] - vexRT[Ch4] + vexRT[Ch1];
-		motor[frontRight] = frontRightMotorSpeed;
-		motor[backRight] = backRightMotorSpeed;
-		motor[frontLeft] = frontLeftMotorSpeed;
-		motor[backLeft] = backLeftMotorSpeed;
+
 
 		// Intake control
 		upperSpeed = 0;
